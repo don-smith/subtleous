@@ -1,0 +1,16 @@
+/* remove bordering whitespace */
+* { 
+  margin: 0;
+  padding: 0;
+}
+
+/* make full screen*/
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* removes scrollbars */
+canvas {
+  display: block;
+}

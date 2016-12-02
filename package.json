@@ -1,0 +1,18 @@
+{
+  "name": "subtleous",
+  "version": "0.1.0",
+  "description": "A subtle visualisation",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo index.js --live --css style.css"
+  },
+  "keywords": [],
+  "author": "Don Smith <locksmithdon@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "budo": "^9.2.2"
+  },
+  "dependencies": {
+    "color": "^0.11.4"
+  }
+}
