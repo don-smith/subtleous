@@ -32,7 +32,7 @@ function setupCanvas () {
 }
 
 function resizeCanvas () {
-  const ctx = getCanvas()
+  const ctx = getCanvas().getContext('2d')
   const {width, height} = getWindowSize()
   const points = getPoints(width, height)
   ctx.width = width
@@ -68,16 +68,11 @@ function getPoints (width, height, palette) {
   for (let i = 0; i < count; i++) {
     points.push(getPoint(width, height, palette))
   }
-  // points.push([500, 100, 300, 255, 0, 0])
-  // points.push([200, 100, 100, 0, 255, 0])
-  // points.push([100, 400, 300, 0, 0, 255])
-  // points.push([200, 100, 500, 255, 255, 0])
   return points
 }
 
 function getPoint (width, height, palette) {
   const point = []
-  // const point = [500, 100, 300, 255, 0, 0]
   point.push(getRandomSize(width, height))
   Array.prototype.push.apply(point, getRandomLocation(width, height))
   Array.prototype.push.apply(point, getRandomColor(palette))
