@@ -1,11 +1,27 @@
-'use strict'
-
 // const color = require('color')
+
+const requestAnimFrame = (function (callback) {
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
+      window.setTimeout(callback, 1000 / 60)
+    }
+})()
 
 setupCanvas()
 resizeCanvas()
 window.addEventListener('resize', resizeCanvas, false)
-startAnimation()
+
+const ctx = getCanvas().getContext('2d')
+const maxStep = 100
+const rev = false
+const step = 1
+const {width, height} = getWindowSize()
+const points = getPoints(width, height)
+animate(ctx, points, step, rev, maxStep)
 
 function setupCanvas () {
   const canvas = document.createElement('canvas')
@@ -16,11 +32,12 @@ function setupCanvas () {
 }
 
 function resizeCanvas () {
-  const canvas = getCanvas()
+  const ctx = getCanvas()
   const {width, height} = getWindowSize()
-  canvas.width = width
-  canvas.height = height
-  startAnimation()
+  const points = getPoints(width, height)
+  ctx.width = width
+  ctx.height = height
+  animate(ctx, points, 1, false, 100)
 }
 
 function getCanvas () {
@@ -34,17 +51,13 @@ function getWindowSize () {
   }
 }
 
-function startAnimation () {
-  const {width, height} = getWindowSize()
-  const points = getPoints(width, height)
-  const maxStep = 10
-  let rev = false
-  let step = 10
-  // setInterval(() => {
+function animate (ctx, points, step, rev, maxStep) {
+  requestAnimFrame(() => {
+    draw(ctx, points, step)
     step = rev ? ++step : --step
-    draw(points, step)
     rev = step > maxStep || step < 0 ? !rev : rev
-  // }, 200)
+    animate(ctx, points, step, rev, maxStep)
+  })
 }
 
 function getPoints (width, height, palette) {
@@ -96,14 +109,13 @@ function getRandomColor (palette) {
   return color
 }
 
-function draw (points, step) {
-  const ctx = getCanvas().getContext('2d')
+function draw (ctx, points, step) {
   const {width, height} = getWindowSize()
   ctx.fillStyle = 'rgb(215,197,174)'
   ctx.fillRect(0, 0, width, height)
 
   points.forEach((point, idx) => {
-    const opacity = step * 0.1 / 2
+    const opacity = step * 0.02 / 2
     const [size, x, y, r, g, b] = point
     const gradRad = Math.floor(size * 0.5)
     const gradX = Math.floor(size * 0.5 + x)
