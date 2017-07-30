@@ -12,16 +12,10 @@ const requestAnimFrame = (function (callback) {
 })()
 
 setupCanvas()
-resizeCanvas()
-window.addEventListener('resize', resizeCanvas, false)
-
 const ctx = getCanvas().getContext('2d')
-const maxStep = 100
-const rev = false
-const step = 1
-const {width, height} = getWindowSize()
-const points = getPoints(width, height)
-animate(ctx, points, step, rev, maxStep)
+const resize = resizeCanvas.bind(this, ctx)
+window.addEventListener('resize', resize, false)
+resize()
 
 function setupCanvas () {
   const canvas = document.createElement('canvas')
@@ -31,9 +25,12 @@ function setupCanvas () {
   document.body.appendChild(canvas)
 }
 
-function resizeCanvas () {
-  const ctx = getCanvas().getContext('2d')
+function resizeCanvas (ctx) {
   const {width, height} = getWindowSize()
+  const canvas = document.getElementById('canvas')
+  canvas.setAttribute('width', width)
+  canvas.setAttribute('height', height)
+
   const points = getPoints(width, height)
   ctx.width = width
   ctx.height = height
