@@ -1,15 +1,7 @@
-// const color = require('color')
+const getPoints = require('./get-points')
+const requestAniFrame = require('./request-ani-frame')
 
-const requestAnimFrame = (function (callback) {
-  return window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function (callback) {
-      window.setTimeout(callback, 1000 / 60)
-    }
-})()
+// const color = require('color')
 
 setupCanvas()
 const ctx = getCanvas().getContext('2d')
@@ -49,56 +41,12 @@ function getWindowSize () {
 }
 
 function animate (ctx, points, step, rev, maxStep) {
-  requestAnimFrame(() => {
+  requestAniFrame(() => {
     draw(ctx, points, step)
     step = rev ? ++step : --step
     rev = step > maxStep || step < 0 ? !rev : rev
     animate(ctx, points, step, rev, maxStep)
   })
-}
-
-function getPoints (width, height, palette) {
-  // [size, x, y, r, g, b]
-  const points = []
-  const count = 100
-
-  for (let i = 0; i < count; i++) {
-    points.push(getPoint(width, height, palette))
-  }
-  return points
-}
-
-function getPoint (width, height, palette) {
-  const point = []
-  point.push(getRandomSize(width, height))
-  Array.prototype.push.apply(point, getRandomLocation(width, height))
-  Array.prototype.push.apply(point, getRandomColor(palette))
-  return point
-}
-
-function getRandomSize (width, height) {
-  const min = 200
-  const max = Math.min(width / 2, height / 2)
-  const size = Math.random() * (max - min) + min
-  return Math.floor(size)
-}
-
-function getRandomLocation (width, height) {
-  const min = -100
-  const location = []
-  const x = Math.random() * (width - min) + min
-  const y = Math.random() * (height - min) + min
-  location.push(Math.floor(x))
-  location.push(Math.floor(y))
-  return location
-}
-
-function getRandomColor (palette) {
-  const color = []
-  color.push(Math.floor(Math.random() * 255))
-  color.push(Math.floor(Math.random() * 255))
-  color.push(Math.floor(Math.random() * 255))
-  return color
 }
 
 function draw (ctx, points, step) {
